@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { GoBackBtn } from 'components';
 import {
   CountryWrapper,
   CountryDescription,
@@ -10,34 +13,33 @@ import {
 } from './CountryInfo.styled';
 
 export const CountryInfo = ({
-  flag,
-  capital,
-  country,
-  id,
-  languages = [],
-  population,
+  country: { flag, capital, country, languages = [], population },
 }) => {
+  const location = useLocation();
+  const goBack = useRef(location?.state?.from ?? '/');
   return (
-    <h2>CountryInfo</h2>
-    // <CountryWrapper >
-    //   <Flag>
-    //     <Image />
-    //   </Flag>
-    //   <CountryDescription>
-    //     <CountryCapital>
-    //       Capital: <Accent></Accent>
-    //     </CountryCapital>
+    <>
+      <GoBackBtn path={goBack.current}>Go back</GoBackBtn>
+      <CountryWrapper>
+        <Flag>
+          <Image src={flag} alt={capital} />
+        </Flag>
+        <CountryDescription>
+          <CountryCapital>
+            Capital: <Accent>{capital}</Accent>
+          </CountryCapital>
 
-    //     <CountryTitle></CountryTitle>
+          <CountryTitle>{country}</CountryTitle>
 
-    //     <CountryDetail>
-    //       Population: <Accent></Accent>
-    //     </CountryDetail>
+          <CountryDetail>
+            Population: <Accent>{population}</Accent>
+          </CountryDetail>
 
-    //     <CountryDetail>
-    //       Languages: <Accent></Accent>
-    //     </CountryDetail>
-    //   </CountryDescription>
-    // </CountryWrapper>
+          <CountryDetail>
+            Languages: <Accent>{languages.join(', ')}</Accent>
+          </CountryDetail>
+        </CountryDescription>
+      </CountryWrapper>
+    </>
   );
 };
